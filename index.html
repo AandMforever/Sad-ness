@@ -58,7 +58,6 @@ background:#6747ff;
 }
 
 /* moving dot */
-
 #dot{
 width:22px;
 height:22px;
@@ -67,10 +66,10 @@ border-radius:50%;
 position:absolute;
 box-shadow:0 0 10px #7c5cff;
 cursor:pointer;
+display:none;
 }
 
 /* heart grow */
-
 #heart{
 font-size:30px;
 cursor:pointer;
@@ -78,7 +77,6 @@ transition:.25s;
 }
 
 /* clouds */
-
 .cloud{
 background:#f3f3ff;
 border-radius:30px;
@@ -90,14 +88,12 @@ box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 /* jar */
-
 #jar{
 font-size:60px;
 cursor:pointer;
 }
 
 /* floating hug hearts */
-
 .floatHeart{
 position:absolute;
 font-size:22px;
@@ -149,12 +145,10 @@ brother, cousins, aunts, uncles, grandmas, grandpas, and
 <!-- Slide 5 -->
 <div class="slide" id="slide5">
 <h2>Tap the clouds to let thoughts float away</h2>
-
 <div class="cloud" onclick="removeCloud(this)">sad</div>
 <div class="cloud" onclick="removeCloud(this)">stress</div>
 <div class="cloud" onclick="removeCloud(this)">worry</div>
 <div class="cloud" onclick="removeCloud(this)">overthinking</div>
-
 </div>
 
 <!-- Slide 6 -->
@@ -189,38 +183,57 @@ brother, cousins, aunts, uncles, grandmas, grandpas, and
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
+let currentSlide=1;
 
-let currentSlide=1
-
+// Move to next slide
 function nextSlide(){
-document.getElementById("slide"+currentSlide).classList.remove("active")
-currentSlide++
-document.getElementById("slide"+currentSlide).classList.add("active")
+document.getElementById("slide"+currentSlide).classList.remove("active");
+
+// stop dot if leaving slide 2
+if(currentSlide === 2){
+stopDot();
 }
 
-/* slower moving dot */
+currentSlide++;
+document.getElementById("slide"+currentSlide).classList.add("active");
 
-const dot=document.getElementById("dot")
+// start dot if entering slide 2
+if(currentSlide === 2){
+startDot();
+}
+}
+
+/* Dot only for Slide 2 */
+const dot = document.getElementById("dot");
+let dotInterval;
 
 function moveDot(){
-let x=Math.random()*(window.innerWidth-30)
-let y=Math.random()*(window.innerHeight-30)
-
-dot.style.transition="3s linear"
-dot.style.left=x+"px"
-dot.style.top=y+"px"
+let x=Math.random()*(window.innerWidth-30);
+let y=Math.random()*(window.innerHeight-30);
+dot.style.transition="3s linear";
+dot.style.left=x+"px";
+dot.style.top=y+"px";
 }
 
-setInterval(moveDot,3000)
+function startDot(){
+dot.style.display="block";
+moveDot();
+dotInterval = setInterval(moveDot,3000);
+}
 
-dot.onclick=()=>{
+function stopDot(){
+dot.style.display="none";
+clearInterval(dotInterval);
+}
+
+// click dot to advance on slide 2 only
+dot.onclick = () => {
 if(currentSlide===2){
-nextSlide()
+nextSlide();
 }
 }
 
-/* heart grow */
-
+/* Heart grow */
 let heart=document.getElementById("heart")
 let size=30
 
@@ -233,8 +246,7 @@ nextSlide()
 }
 }
 
-/* clouds */
-
+/* Clouds */
 function removeCloud(c){
 c.style.display="none"
 
@@ -243,8 +255,7 @@ setTimeout(nextSlide,700)
 }
 }
 
-/* compliment jar */
-
+/* Compliment Jar */
 const compliments=[
 "You matter so much.",
 "You are stronger than this moment.",
@@ -258,14 +269,12 @@ let msg=compliments[Math.floor(Math.random()*compliments.length)]
 document.getElementById("compliment").innerText=msg
 }
 
-/* confetti */
-
+/* Confetti */
 function celebrate(){
 confetti({particleCount:160,spread:80})
 }
 
-/* hug hearts */
-
+/* Hug hearts */
 function hug(){
 for(let i=0;i<15;i++){
 let h=document.createElement("div")
@@ -278,7 +287,6 @@ document.body.appendChild(h)
 setTimeout(()=>h.remove(),3000)
 }
 }
-
 </script>
 
 </body>
