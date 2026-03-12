@@ -5,75 +5,108 @@
 <title>For You 💜</title>
 
 <style>
+
 body{
-font-family: "Comic Sans MS", cursive;
-background: linear-gradient(135deg,#f6c1ff,#caa6ff);
-text-align:center;
-color:#333;
-overflow:hidden;
-}
-
-.slide{
-display:none;
+margin:0;
+font-family: "Arial", "Helvetica", sans-serif;
+background: linear-gradient(135deg,#ffd6f6,#cbb8ff);
 height:100vh;
-align-items:center;
+overflow:hidden;
+display:flex;
 justify-content:center;
-flex-direction:column;
+align-items:center;
 }
 
-.active{
-display:flex;
+.card{
+background:white;
+padding:40px;
+border-radius:25px;
+width:500px;
+max-width:90%;
+box-shadow:0 15px 40px rgba(0,0,0,0.15);
+text-align:center;
+}
+
+.slide{display:none;}
+.active{display:block;}
+
+h2{
+color:#6a4cff;
+margin-bottom:15px;
+}
+
+p{
+font-size:16px;
+line-height:1.4;
 }
 
 button{
-padding:12px 20px;
+padding:12px 22px;
 border:none;
 border-radius:12px;
-background:#8a4bff;
+background:#7c5cff;
 color:white;
 font-size:16px;
 cursor:pointer;
 margin-top:20px;
+transition:.2s;
 }
 
+button:hover{
+transform:scale(1.05);
+background:#6747ff;
+}
+
+/* moving dot */
+
 #dot{
-width:20px;
-height:20px;
-background:#8a4bff;
+width:22px;
+height:22px;
+background:#7c5cff;
 border-radius:50%;
 position:absolute;
+box-shadow:0 0 10px #7c5cff;
 cursor:pointer;
 }
+
+/* heart grow */
 
 #heart{
 font-size:30px;
 cursor:pointer;
-transition:0.2s;
+transition:.25s;
 }
 
+/* clouds */
+
 .cloud{
-background:white;
-padding:10px 20px;
+background:#f3f3ff;
 border-radius:30px;
-margin:10px;
-cursor:pointer;
+padding:10px 20px;
 display:inline-block;
+margin:8px;
+cursor:pointer;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
+
+/* jar */
 
 #jar{
 font-size:60px;
 cursor:pointer;
 }
 
+/* floating hug hearts */
+
 .floatHeart{
 position:absolute;
-font-size:20px;
+font-size:22px;
 animation:floatUp 3s linear forwards;
 }
 
 @keyframes floatUp{
-0%{transform:translateY(0); opacity:1;}
-100%{transform:translateY(-300px); opacity:0;}
+0%{transform:translateY(0);opacity:1;}
+100%{transform:translateY(-350px);opacity:0;}
 }
 
 </style>
@@ -81,9 +114,12 @@ animation:floatUp 3s linear forwards;
 
 <body>
 
+<div class="card">
+
 <!-- Slide 1 -->
 <div class="slide active" id="slide1">
-<h2>My poor sweet girl, you're here most likely because you're sad.</h2>
+<h2>My poor sweet girl</h2>
+<p>You're here most likely because you're sad.</p>
 <button onclick="nextSlide()">Unfortunately</button>
 </div>
 
@@ -91,8 +127,7 @@ animation:floatUp 3s linear forwards;
 <div class="slide" id="slide2">
 <h2>If you're crying, wipe your tears.</h2>
 <p>When you're done crying, tap the moving dot.</p>
-<p>When you cry things look blurry, but when you wipe your tears things become clear again.</p>
-<div id="dot"></div>
+<p>When you're crying things can look blurry, but once you wipe your tears everything becomes clearer.</p>
 </div>
 
 <!-- Slide 3 -->
@@ -103,13 +138,17 @@ animation:floatUp 3s linear forwards;
 
 <!-- Slide 4 -->
 <div class="slide" id="slide4">
-<p>That is how much all your friends, best friends, mom, dad, sister, brother, cousins, aunts, uncles, grandmas, grandpas, and <b>me especially</b> love you.</p>
+<p>
+That is how much all your friends, best friends, mom, dad, sister,
+brother, cousins, aunts, uncles, grandmas, grandpas, and
+<b>me especially</b> love you.
+</p>
 <button onclick="nextSlide()">Next</button>
 </div>
 
 <!-- Slide 5 -->
 <div class="slide" id="slide5">
-<h2>Tap the clouds to let heavy thoughts float away</h2>
+<h2>Tap the clouds to let thoughts float away</h2>
 
 <div class="cloud" onclick="removeCloud(this)">sad</div>
 <div class="cloud" onclick="removeCloud(this)">stress</div>
@@ -128,17 +167,24 @@ animation:floatUp 3s linear forwards;
 
 <!-- Slide 7 -->
 <div class="slide" id="slide7">
-<h2>You made it this far. That counts.</h2>
+<h2>You made it this far.</h2>
+<p>That counts.</p>
 <button onclick="celebrate()">Celebrate yourself</button>
+<br>
 <button onclick="nextSlide()">Next</button>
 </div>
 
 <!-- Slide 8 -->
 <div class="slide" id="slide8">
-<h2>If you need a hug, tap the heart</h2>
+<h2>If you need a hug</h2>
+<p>Tap the heart</p>
 <div style="font-size:50px;cursor:pointer;" onclick="hug()">❤️</div>
-<p>I’m always here for you.</p>
+<p>I'm always here for you.</p>
 </div>
+
+</div>
+
+<div id="dot"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -152,26 +198,34 @@ currentSlide++
 document.getElementById("slide"+currentSlide).classList.add("active")
 }
 
+/* slower moving dot */
+
 const dot=document.getElementById("dot")
 
 function moveDot(){
-let x=Math.random()*window.innerWidth
-let y=Math.random()*window.innerHeight
+let x=Math.random()*(window.innerWidth-30)
+let y=Math.random()*(window.innerHeight-30)
+
+dot.style.transition="3s linear"
 dot.style.left=x+"px"
 dot.style.top=y+"px"
 }
 
-setInterval(moveDot,1500)
+setInterval(moveDot,3000)
 
 dot.onclick=()=>{
+if(currentSlide===2){
 nextSlide()
 }
+}
+
+/* heart grow */
 
 let heart=document.getElementById("heart")
 let size=30
 
 heart.onclick=()=>{
-size+=10
+size+=12
 heart.style.fontSize=size+"px"
 
 if(size>180){
@@ -179,13 +233,17 @@ nextSlide()
 }
 }
 
-function removeCloud(cloud){
-cloud.style.display="none"
+/* clouds */
+
+function removeCloud(c){
+c.style.display="none"
 
 if(document.querySelectorAll(".cloud:not([style*='display: none'])").length===0){
-setTimeout(nextSlide,800)
+setTimeout(nextSlide,700)
 }
 }
+
+/* compliment jar */
 
 const compliments=[
 "You matter so much.",
@@ -200,9 +258,13 @@ let msg=compliments[Math.floor(Math.random()*compliments.length)]
 document.getElementById("compliment").innerText=msg
 }
 
+/* confetti */
+
 function celebrate(){
-confetti({particleCount:150,spread:80})
+confetti({particleCount:160,spread:80})
 }
+
+/* hug hearts */
 
 function hug(){
 for(let i=0;i<15;i++){
