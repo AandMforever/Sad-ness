@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You 💜</title>
+
+<style>
+body{
+font-family: "Comic Sans MS", cursive;
+background: linear-gradient(135deg,#f6c1ff,#caa6ff);
+text-align:center;
+color:#333;
+overflow:hidden;
+}
+
+.slide{
+display:none;
+height:100vh;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+}
+
+.active{
+display:flex;
+}
+
+button{
+padding:12px 20px;
+border:none;
+border-radius:12px;
+background:#8a4bff;
+color:white;
+font-size:16px;
+cursor:pointer;
+margin-top:20px;
+}
+
+#dot{
+width:20px;
+height:20px;
+background:#8a4bff;
+border-radius:50%;
+position:absolute;
+cursor:pointer;
+}
+
+#heart{
+font-size:30px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.cloud{
+background:white;
+padding:10px 20px;
+border-radius:30px;
+margin:10px;
+cursor:pointer;
+display:inline-block;
+}
+
+#jar{
+font-size:60px;
+cursor:pointer;
+}
+
+.floatHeart{
+position:absolute;
+font-size:20px;
+animation:floatUp 3s linear forwards;
+}
+
+@keyframes floatUp{
+0%{transform:translateY(0); opacity:1;}
+100%{transform:translateY(-300px); opacity:0;}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Slide 1 -->
+<div class="slide active" id="slide1">
+<h2>My poor sweet girl, you're here most likely because you're sad.</h2>
+<button onclick="nextSlide()">Unfortunately</button>
+</div>
+
+<!-- Slide 2 -->
+<div class="slide" id="slide2">
+<h2>If you're crying, wipe your tears.</h2>
+<p>When you're done crying, tap the moving dot.</p>
+<p>When you cry things look blurry, but when you wipe your tears things become clear again.</p>
+<div id="dot"></div>
+</div>
+
+<!-- Slide 3 -->
+<div class="slide" id="slide3">
+<h2>Click the heart to grow it</h2>
+<div id="heart">❤️</div>
+</div>
+
+<!-- Slide 4 -->
+<div class="slide" id="slide4">
+<p>That is how much all your friends, best friends, mom, dad, sister, brother, cousins, aunts, uncles, grandmas, grandpas, and <b>me especially</b> love you.</p>
+<button onclick="nextSlide()">Next</button>
+</div>
+
+<!-- Slide 5 -->
+<div class="slide" id="slide5">
+<h2>Tap the clouds to let heavy thoughts float away</h2>
+
+<div class="cloud" onclick="removeCloud(this)">sad</div>
+<div class="cloud" onclick="removeCloud(this)">stress</div>
+<div class="cloud" onclick="removeCloud(this)">worry</div>
+<div class="cloud" onclick="removeCloud(this)">overthinking</div>
+
+</div>
+
+<!-- Slide 6 -->
+<div class="slide" id="slide6">
+<h2>Tap the jar for a reminder</h2>
+<div id="jar">🏺</div>
+<p id="compliment"></p>
+<button onclick="nextSlide()">Next</button>
+</div>
+
+<!-- Slide 7 -->
+<div class="slide" id="slide7">
+<h2>You made it this far. That counts.</h2>
+<button onclick="celebrate()">Celebrate yourself</button>
+<button onclick="nextSlide()">Next</button>
+</div>
+
+<!-- Slide 8 -->
+<div class="slide" id="slide8">
+<h2>If you need a hug, tap the heart</h2>
+<div style="font-size:50px;cursor:pointer;" onclick="hug()">❤️</div>
+<p>I’m always here for you.</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+
+let currentSlide=1
+
+function nextSlide(){
+document.getElementById("slide"+currentSlide).classList.remove("active")
+currentSlide++
+document.getElementById("slide"+currentSlide).classList.add("active")
+}
+
+const dot=document.getElementById("dot")
+
+function moveDot(){
+let x=Math.random()*window.innerWidth
+let y=Math.random()*window.innerHeight
+dot.style.left=x+"px"
+dot.style.top=y+"px"
+}
+
+setInterval(moveDot,1500)
+
+dot.onclick=()=>{
+nextSlide()
+}
+
+let heart=document.getElementById("heart")
+let size=30
+
+heart.onclick=()=>{
+size+=10
+heart.style.fontSize=size+"px"
+
+if(size>180){
+nextSlide()
+}
+}
+
+function removeCloud(cloud){
+cloud.style.display="none"
+
+if(document.querySelectorAll(".cloud:not([style*='display: none'])").length===0){
+setTimeout(nextSlide,800)
+}
+}
+
+const compliments=[
+"You matter so much.",
+"You are stronger than this moment.",
+"People care about you deeply.",
+"You deserve kindness.",
+"You are loved more than you know."
+]
+
+document.getElementById("jar").onclick=()=>{
+let msg=compliments[Math.floor(Math.random()*compliments.length)]
+document.getElementById("compliment").innerText=msg
+}
+
+function celebrate(){
+confetti({particleCount:150,spread:80})
+}
+
+function hug(){
+for(let i=0;i<15;i++){
+let h=document.createElement("div")
+h.className="floatHeart"
+h.innerHTML="❤️"
+h.style.left=Math.random()*window.innerWidth+"px"
+h.style.top=window.innerHeight+"px"
+document.body.appendChild(h)
+
+setTimeout(()=>h.remove(),3000)
+}
+}
+
+</script>
+
+</body>
+</html>
